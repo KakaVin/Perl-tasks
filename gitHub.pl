@@ -25,7 +25,7 @@ for my $i( 0..$#nameRepos ){
 		} else { last }
 	}
 	$marking = 0;
-	ShowRepos (@nameRepos[$i], @dateCommit);
+	ShowRepos( @nameRepos[$i], @dateCommit );
 	if ( $marking == 0 ){ say "no commits last year\n" }
 }
 sub ShowRepos{
@@ -63,7 +63,7 @@ sub PrintLine{
 	my $returLine = "";
 	my $print = 0;
 	for (my $i = 0; $i < scalar @hour; $i++){
-		if ( @hour[$i] ){ $returLine = $returLine."   " }
+		if ( @hour[$i] ){ $returLine .="   " }
 		if ( @hour[$i] >= 10 ){
 			$returLine .= " @hour[$i]";
 			$print++;
