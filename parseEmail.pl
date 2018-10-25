@@ -37,29 +37,22 @@ is $parse_email{'Domain'}, 'example.com', 'domain correct';
 
 diag("\nnot correct\n");
 %parse_email = parse_email('Name <mail@example.com');
-is $parse_email{'Name'}, undef, 'name undef';
-is $parse_email{'Mail'}, undef, 'mail undef';
-is $parse_email{'Domain'}, undef, 'domain undef';
+is $parse_email{'Domain'}, undef, 'no parse';
 %parse_email = parse_email('"mail@example.com');
-is $parse_email{'Mail'}, undef, 'mail undef';
-is $parse_email{'Domain'}, undef, 'domain undef';
+is $parse_email{'Domain'}, undef, 'no parse';
 %parse_email = parse_email('ma"il@example.com');
-is $parse_email{'Mail'}, undef, 'mail undef';
-is $parse_email{'Domain'}, undef, 'domain undef';
+is $parse_email{'Domain'}, undef, 'no parse';
 %parse_email = parse_email('Name mail@example.com>');
-is $parse_email{'Name'}, undef, 'name undef';
-is $parse_email{'Mail'}, undef, 'mail undef';
-is $parse_email{'Domain'}, undef, 'domain undef';
+is $parse_email{'Domain'}, undef, 'no parse';
 %parse_email = parse_email('"l o g i n"@example com');
-is $parse_email{'Name'}, undef, 'name undef';
-is $parse_email{'Login'}, undef, 'login undef';
-is $parse_email{'Domain'}, undef, 'domain undef';
+is $parse_email{'Domain'}, undef, 'no parse';
 %parse_email = parse_email('mail+ext+undef@example.com');
-is $parse_email{'Mail'}, undef, 'mail undef';
-is $parse_email{'Domain'}, undef, 'domain undef';
+is $parse_email{'Domain'}, undef, 'no parse';
 %parse_email = parse_email('mail@example.com.ru');
-is $parse_email{'Mail'}, undef, 'mail undef';
-is $parse_email{'Domain'}, undef, 'domain undef';
+is $parse_email{'Domain'}, undef, 'no parse';
+%parse_email = parse_email('"Ather Name "l o g i n"@example.com');
+is $parse_email{'Domain'}, undef, 'no parse';
+
 done_testing();
 
 sub parse_email($){
@@ -79,7 +72,7 @@ $mail =~ m{^
 		(
 			(?'mail' (\w+) | (\w+\+\w+) )
 			|
-			"(?'login'\N+)"
+			"(?'login'[^"]+)"
 		)
 		@ (?'domain'\w+\.\w+)
 	)				
