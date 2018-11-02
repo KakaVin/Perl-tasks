@@ -2,11 +2,15 @@ use 5.016;
 use Getopt::Std;
 use Cwd;
 
+#use warnings;
+
 our ( $opt_p, $opt_c );
+my ( $pattern, $catalog );
+
 getopts("p:c:");
-my $pattern = $opt_p || die "-p pattern undifinded $!";
-my $catalog = $opt_c || Cwd::abs_path();
-show_dir( $catalog, 'lol' );
+$pattern = $opt_p || die "-p pattern undifinded $!";
+$catalog = $opt_c || Cwd::abs_path();
+show_dir($catalog);
 
 sub show_dir($) {
     my $dir = $_[0];
