@@ -1,26 +1,29 @@
 use 5.016;
 use Getopt::Std;
+use Cwd;
 
-getopts("p:c:");
 our ( $opt_p, $opt_c );
-my $pattern = $opt_p;
-show_dir($opt_c);
+getopts("p:c:");
+my $pattern = $opt_p || die "-p pattern undifinded $!";
+my $catalog = $opt_c || Cwd::abs_path();
+show_dir( $catalog, 'lol' );
 
 sub show_dir($) {
     my $dir = $_[0];
     opendir( my $d, "$dir" ) or die "$dir $!";
     for ( readdir($d) ) {
-        next if $_ =~ /\.\.?$/;
         if ( -T "$dir/$_" && -R "$dir/$_" ) {
-            open( InFile, "$dir/$_" ) or die $!;
+            open( my $in, "$dir/$_" ) or die $!;
             my $num_line = 0;
-            while ( my $line = <InFile> ) {
+            while ( my $line = <$in> ) {
+                chomp $line;
                 $num_line++;
-                print "$dir/$_:$num_line:# $line" if $line =~ /$pattern/i;
+                say "$dir/$_:$num_line:# $line" if $line =~ /$pattern/i;
             }
-            close(InFile);
+            close($in) or warn $!;
         }
         if ( -d "$dir/$_" && -R "$dir/$_" ) {
+            next if $_ =~ /\.\.?$/;
             show_dir("$dir/$_");
         }
     }
