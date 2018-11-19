@@ -5,45 +5,34 @@ sub new {
     my $class = ref($proto) || $proto;
     my $self  = {};
     bless( $self, $class );
-    $self->{name}        = shift || "undef";
-    $self->{key}         = shift || "undef";
-    $self->{date}        = shift || "undef";
-    $self->{count_users} = shift || "undef";
+    $self->{name}          = shift || "undef";
+    $self->{key_license}   = shift || "undef";
+    $self->{date_license}  = shift || "undef";
+    $self->{count_license} = shift || "undef";
     return $self;
 }
 
-sub total {
+sub name {
     my ($self) = shift;
-    print $self->{count_users} . "\n";
+    if (@_) { $self->{name} = shift }
+    return $self->{name};
 }
 
-sub use {
+sub key_license {
     my ($self) = shift;
-    if ( $self->{count_users} > 0 ) {
-        $self->{count_users}--;
-    }
-    else {
-        die "the keys are over";
-    }
+    if (@_) { $self->{key_license} = shift }
+    return $self->{key_license};
+}
 
-    sub get_name {
-        my ($self) = @_;
-        return $self->{name};
-    }
+sub date_license {
+    my ($self) = shift;
+    if (@_) { $self->{date_license} = shift }
+    return $self->{date_license};
+}
 
-    sub get_key {
-        my ($self) = @_;
-        return $self->{key};
-    }
-
-    sub get_date {
-        my ($self) = @_;
-        return $self->{date};
-    }
-
-    sub get_count_users {
-        my ($self) = @_;
-        return $self->{count_users};
-    }
+sub count_license {
+    my ($self) = shift;
+    if (@_) { $self->{count_license} = shift }
+    return $self->{count_license};
 }
 1;

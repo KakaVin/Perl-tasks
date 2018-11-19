@@ -1,5 +1,4 @@
 package Server;
-use Host;
 
 sub new {
     my $proto = shift;
@@ -9,36 +8,32 @@ sub new {
     $self->{name_net} = shift || "undef";
     $self->{IP}       = shift || "undef";
     $self->{domain}   = shift || "undef";
+    $self->{hosts}    = [];
     return $self;
 }
 
-sub new_Host($$$$) {
+sub name_net {
     my ($self) = shift;
-    return new Host( $self, @_ );
-}
-
-sub get_name_net {
-    my ($self) = @_;
+    if (@_) { $self->{name_net} = shift }
     return $self->{name_net};
 }
 
-sub get_IP {
-    my ($self) = @_;
+sub IP {
+    my ($self) = shift;
+    if (@_) { $self->{IP} = shift }
     return $self->{IP};
 }
 
-sub get_domain {
-    my ($self) = @_;
+sub domain {
+    my ($self) = shift;
+    if (@_) { $self->{domain} = shift }
     return $self->{domain};
 }
 
-sub print_all_info($$) {
+sub hosts {
     my ($self) = shift;
-    print "\nTotal info: " . shift . "\n";
-    while ( my ( $key, $value ) = each(%$self) ) {
-        print "$key => $value\n";
-    }
-    print "\n";
+    if (@_) { @{ $self->{hosts} } = @_ }
+    return $self->{hosts};
 }
 
 1;
