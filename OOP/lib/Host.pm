@@ -5,12 +5,29 @@ sub new {
     my $class = ref($proto) || $proto;
     my $self  = {};
     bless( $self, $class );
-    $self->{CPU}  = shift || "undef";
-    $self->{RAM}  = shift || "undef";
-    $self->{DISK} = shift || "undef";
-    $self->{NET}  = shift || "undef";
+    $self->{owner} = shift || undef;
+    $self->{CPU}   = shift || undef;
+    $self->{RAM}   = shift || undef;
+    $self->{DISK}  = shift || undef;
+    $self->{NET}   = shift || undef;
     $self->{programs} = [];
+
+    $self->{owner}->owns($self);
     return $self;
+}
+
+sub close {
+    my ($self) = shift;
+    print "close Host\n";
+    for ( my $var = 0 ; $var <= $#{ $self->{programs} } ; $var++ ) {
+        $_[$var]->count_license( $_[$var]->count_license + 1 );
+    }
+}
+
+sub owner {
+    my ($self) = shift;
+    if (@_) { $self->{owner} = shift }
+    return $self->{owner};
 }
 
 sub CPU {

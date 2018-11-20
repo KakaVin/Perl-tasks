@@ -5,23 +5,35 @@ sub new {
     my $class = ref($proto) || $proto;
     my $self  = {};
     bless( $self, $class );
-    $self->{Login}    = shift || "undef";
-    $self->{Password} = shift || "undef";
+    $self->{login}    = shift || "undef";
+    $self->{password} = shift || "undef";
     $self->{age}      = shift || "undef";
     $self->{owns}     = [];
     return $self;
 }
 
-sub Login {
+sub dell {
     my ($self) = shift;
-    if (@_) { $self->{Login} = shift }
-    return $self->{Login};
+    my $close = shift;
+    for ( my $var = 0 ; $var <= $#{ $self->{owns} } ; $var++ ) {
+        if ( @{ $self->{owns} }[$var] == $close ) {
+            print @{ $self->{owns} }[$var]->IP;
+            splice @{ $self->{owns} }, $var, 1;
+        }
+    }
+    print "\n" . ( $#{ $self->{owns} } + 1 ) . "\n";
 }
 
-sub Password {
+sub login {
     my ($self) = shift;
-    if (@_) { $self->{Password} = shift }
-    return $self->{Password};
+    if (@_) { $self->{login} = shift }
+    return $self->{login};
+}
+
+sub password {
+    my ($self) = shift;
+    if (@_) { $self->{password} = shift }
+    return $self->{password};
 }
 
 sub age {
@@ -38,7 +50,7 @@ sub NET {
 
 sub owns {
     my ($self) = shift;
-    if (@_) { @{ $self->{owns} } = @_ }
+    if (@_) { push @{ $self->{owns} }, @_ }
     return $self->{owns};
 }
 
