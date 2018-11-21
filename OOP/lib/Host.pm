@@ -18,9 +18,12 @@ sub new {
 
 sub close {
     my ($self) = shift;
-    print "close Host\n";
+    $self->{owner}->dell($self);
+
+    #print "close Host, @ program = " . ( $#{ $self->{programs} } + 1 ) . "\n";
     for ( my $var = 0 ; $var <= $#{ $self->{programs} } ; $var++ ) {
-        $_[$var]->count_license( $_[$var]->count_license + 1 );
+        $self->{programs}[$var]
+          ->count_license( $self->{programs}[$var]->count_license + 1 );
     }
 }
 
@@ -56,15 +59,23 @@ sub NET {
 
 sub programs {
     my ($self) = shift;
+    my $own = shift;
     if (@_) {
         for ( my $var = 0 ; $var <= $#_ ; $var++ ) {
             die "run out of licenses in $_[$var]->{name} $!"
               if $_[$var]->count_license - 1 < 0;
 
             $_[$var]->count_license( $_[$var]->count_license - 1 );
+            $own->owns( $_[$var] );
         }
         @{ $self->{programs} } = @_;
     }
     return $self->{programs};
+}
+
+sub DESTROY {
+    my ($self) = shift;
+    print "$self dying " . $self->CPU, ' ', scalar localtime, "\n";
+
 }
 1;

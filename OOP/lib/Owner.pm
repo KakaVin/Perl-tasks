@@ -17,11 +17,9 @@ sub dell {
     my $close = shift;
     for ( my $var = 0 ; $var <= $#{ $self->{owns} } ; $var++ ) {
         if ( @{ $self->{owns} }[$var] == $close ) {
-            print @{ $self->{owns} }[$var]->IP;
             splice @{ $self->{owns} }, $var, 1;
         }
     }
-    print "\n" . ( $#{ $self->{owns} } + 1 ) . "\n";
 }
 
 sub login {

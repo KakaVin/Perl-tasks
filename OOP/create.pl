@@ -21,19 +21,25 @@ my $server3 = new Server( $admin, "Users",   "10.10.56.101/24", "example.com" );
 
 my $host1 = new Host( $admin, "CPU1", "RAM1", "DISK1", "NET1" );
 my $host2 = new Host( $admin, "CPU2", "RAM2", "DISK2", "NET2" );
+my $host3 = new Host( $user1, "CPU3", "RAM3", "DISK3", "NET3" );
+my $host4 = new Host( $user1, "CPU4", "RAM4", "DISK4", "NET4" );
 
 $server1->hosts( $host1, $host2 );
+$server3->hosts( $host3, $host4 );
 
-#$host1->programs( $user1, $program1, $program2 );
-#$host2->programs( $user2, $program1 );
+$host1->programs( $user1, $program1, $program2 );
+$host2->programs( $user2, $program1 );
+$host3->programs( $user2, $program1 );
 
-#is $server2, $admin->owns->[1];
-is $host1, $server1->hosts->[0];
+is $server2, $admin->owns->[1];
+is $host1,   $server1->hosts->[0];
 is $host2->programs->[0], $user2->owns->[0];
 done_testing();
 
 $server1->close();
 $server1 = $host1 = $host2 = undef;
+$server3->close($host3);
+$host3 = undef;
 
-select( undef, undef, undef, 5 );
+select( undef, undef, undef, 1 );
 say "конец программы";

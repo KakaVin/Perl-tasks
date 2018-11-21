@@ -17,10 +17,20 @@ sub new {
 
 sub close {
     my ($self) = shift;
-    $self->{owner}->dell($self);
-    print "$#{ $self->{hosts} } \n";
-    for ( my $var = 0 ; $var <= $#{ $self->{hosts} } ; $var++ ) {
-        @{ $self->{hosts} }[$var]->close();
+    my $delhost = shift;
+    if ($delhost) {
+        for ( my $var = 0 ; $var <= $#{ $self->{hosts} } ; $var++ ) {
+            if ( @{ $self->{hosts} }[$var] == $delhost ) {
+                @{ $self->{hosts} }[$var]->close();
+                splice @{ $self->{hosts} }, $var, 1;
+            }
+        }
+    }
+    else {
+        $self->{owner}->dell($self);
+        for ( my $var = 0 ; $var <= $#{ $self->{hosts} } ; $var++ ) {
+            @{ $self->{hosts} }[$var]->close();
+        }
     }
 }
 
@@ -51,13 +61,14 @@ sub domain {
 
 sub hosts {
     my ($self) = shift;
-    if (@_) { @{ $self->{hosts} } = @_ }
+    if (@_) {
+        @{ $self->{hosts} } = @_;
+    }
     return $self->{hosts};
 }
 
 sub DESTROY {
     my ($self) = shift;
     print "$self dying ", scalar localtime, "\n";
-
 }
 1;
